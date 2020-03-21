@@ -15,6 +15,8 @@ def get_indices_of_item_weights(weights, length, limit):
         if weights[i] > limit:
             continue
 
+        hash_table_insert(ht, weights[i], i)
+
         print(i, weights[i])
         # check if weight difference exists in hash table
         diff = abs(limit - weights[i])
