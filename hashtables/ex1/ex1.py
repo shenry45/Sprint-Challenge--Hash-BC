@@ -5,13 +5,29 @@ from hashtables import (HashTable,
                         hash_table_retrieve,
                         hash_table_resize)
 
-
 def get_indices_of_item_weights(weights, length, limit):
     ht = HashTable(16)
 
-    """
-    YOUR CODE HERE
-    """
+    # insert first weight into hashtable
+    hash_table_insert(ht, weights[0], 0)
+
+    for i in range(1, len(weights)):
+        if weights[i] > limit:
+            continue
+
+        print(i, weights[i])
+        # check if weight difference exists in hash table
+        diff = abs(limit - weights[i])
+        print('diff', diff)
+
+        match = hash_table_retrieve(ht, diff)
+        print('match', match)
+        
+        if match is not None:
+            if match < i:
+                return (i, match)
+            else:
+                return (match, i)
 
     return None
 
