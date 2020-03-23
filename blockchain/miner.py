@@ -25,15 +25,11 @@ def proof_of_work(last_proof):
     # get last block in chain
     data = requests.get(url='https://lambda-coin.herokuapp.com/api/full_chain')
     last_block = data.json()["chain"][-1:]
-    print(last_block[0]["proof"])
 
-    print("Searching for next proof")
     proof = 0
 
     while valid_proof(last_block[0], proof) is False:
         proof += 1
-
-    print(hash(last_block[0]["proof"]), hash(proof))
 
     print("Proof found: " + str(proof) + " in " + str(timer() - start))
     return proof
@@ -47,7 +43,13 @@ def valid_proof(last_hash, proof):
 
     IE:  last_hash: ...AE9123456, new hash 123456E88...
     """
-    return str(hash(last_hash["proof"]))[:6] == str(hash(proof))[-6:]
+    guess = f'{last_hash["proof"]}'.encode()
+    proof_hash = f'{proof}'.encode()
+
+    guess_hash = hashlib.sha256(guess).hexdigest()
+    proof_convert = hashlib.sha256(proof_hash).hexdigest()
+
+    return guess_hash[:6] == proof_convert[-6:]
 
 
 if __name__ == '__main__':
